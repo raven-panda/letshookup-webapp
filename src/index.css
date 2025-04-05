@@ -32,4 +32,5 @@
 body {
   min-height: 100vh;
   background-color: var(--color-secondary-3);
+  color: var(--color-common-1);
 }
