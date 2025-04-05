@@ -5,6 +5,11 @@
   --color-common-1: #0C0C0C;
   --color-common-2: #FEFEFE;
 
+  --color-placeholder-1: rgba(85, 85, 85);
+  --color-placeholder-2: rgb(182, 182, 182);
+  --color-placeholder-3: rgba(230, 230, 230);
+  --color-placeholder-4: rgba(240, 240, 240);
+
   --color-main-1: #581C06;
   --color-main-2: #E48B82;
 
@@ -13,7 +18,12 @@
   --color-secondary-3: #f6f5f2;
 
   --color-accent-valid: #32D392;
+  --color-accent-valid-2: #2abc81;
+  --color-accent-valid-3: #1ea16c;
   --color-accent-action: #FFF36E;
+  --color-accent-red: #dd2222;
+
+  --breakpoint-xs: 425px;
 }
 
 :root {
@@ -33,4 +43,33 @@ body {
   min-height: 100vh;
   background-color: var(--color-secondary-3);
   color: var(--color-common-1);
+}
+
+button {
+  cursor: pointer;
+}
+
+input {
+  color: var(--color-common-1);
+}
+
+input, button {
+  outline: none;
+}
+
+input::placeholder {
+  color: var(--color-placeholder-2);
+}
+
+.link {
+  color: var(--color-blue-600);
+  text-decoration: underline;
+}
+
+* {
+  transition: background-color ease-in-out 0.3s;
+}
+
+button, input {
+  transition: background-color ease-in-out 0.1s;
 }

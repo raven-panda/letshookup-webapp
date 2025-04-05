@@ -2,7 +2,6 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import IndexPage from './pages/Index.jsx';
 
 export default function AppRouter() {
-  console.log('rtouter');
   return (
     <BrowserRouter>
       <Routes>
