@@ -2,7 +2,14 @@ import { useForm } from '../hook/FormHook.js';
 import Button from '../button/Button.jsx';
 
 export default function RegisterForm() {
-  const { formData, errors, onChange, onSubmit, getLabelForError } = useForm(
+  const {
+    formData,
+    errors,
+    touchedFields,
+    onChange,
+    onSubmit,
+    getLabelForError,
+  } = useForm(
     {
       username: '',
       email: '',
@@ -46,7 +53,7 @@ export default function RegisterForm() {
         onChange={onChange}
         required
       />
-      {errors['username'] && (
+      {errors['username'] && touchedFields.includes('username') && (
         <div className="text-accent-red">
           {getLabelForError(errors['username'])}
         </div>
@@ -64,7 +71,7 @@ export default function RegisterForm() {
         onChange={onChange}
         required
       />
-      {errors['email'] && (
+      {errors['email'] && touchedFields.includes('email') && (
         <div className="text-accent-red">
           {getLabelForError(errors['email'])}
         </div>
@@ -82,7 +89,7 @@ export default function RegisterForm() {
         onChange={onChange}
         required
       />
-      {errors['password'] && (
+      {errors['password'] && touchedFields.includes('password') && (
         <div className="text-accent-red">
           {getLabelForError(errors['password'])}
         </div>
@@ -100,11 +107,12 @@ export default function RegisterForm() {
         onChange={onChange}
         required
       />
-      {errors['passwordConfirm'] && (
-        <div className="text-accent-red">
-          {getLabelForError(errors['passwordConfirm'])}
-        </div>
-      )}
+      {errors['passwordConfirm'] &&
+        touchedFields.includes('passwordConfirm') && (
+          <div className="text-accent-red">
+            {getLabelForError(errors['passwordConfirm'])}
+          </div>
+        )}
 
       <Button.Outline variant="valid" type="submit" className="mt-8">
         Créer un compte

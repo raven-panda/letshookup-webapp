@@ -24,7 +24,7 @@ function validateField(value, formData, validations) {
   return fieldErrors.length > 0 ? fieldErrors[0] : undefined;
 }
 
-function validateForm(formData, validations) {
+function validateForm(formData, validations = {}) {
   const errors = {};
 
   Object.entries(formData)
@@ -43,10 +43,10 @@ function validateForm(formData, validations) {
 
 /**
  *
- * @param defaultValue {object}
- * @param defaultValidations {object}
- * @param submitCallback {(function(): object)}
- * @returns {{formData: object, errors: {}, onChange: (function(e): object), onSubmit: (function(e): object)}}
+ * @param defaultValue
+ * @param defaultValidations
+ * @param submitCallback
+ * @returns {{formData: object, errors: object, touchedFields: string[], onChange: (function(e): object), onSubmit: (function(e): object), getLabelForError: (function(error: string, errorParams?: object): string)}}
  */
 export function useForm(defaultValue, defaultValidations = {}, submitCallback) {
   if (!defaultValue)
@@ -55,6 +55,7 @@ export function useForm(defaultValue, defaultValidations = {}, submitCallback) {
     );
 
   const [formData, setFormData] = useState(defaultValue);
+  const [touchedFields, setTouchedFields] = useState([]);
   const [fieldValidations] = useState(defaultValidations);
   const [errors, setErrors] = useState({});
 
@@ -78,12 +79,11 @@ export function useForm(defaultValue, defaultValidations = {}, submitCallback) {
 
   const onChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const newFormData = { ...formData, [name]: value };
+    setFormData(newFormData);
 
-    setErrors((prev) => ({
-      ...prev,
-      [name]: validateField(value, formData, fieldValidations[name]),
-    }));
+    setErrors(validateForm(newFormData, fieldValidations).errors);
+    setTouchedFields((prev) => [...prev, name]);
   };
 
   const onSubmit = (e) => {
@@ -94,8 +94,17 @@ export function useForm(defaultValue, defaultValidations = {}, submitCallback) {
       return;
     }
 
+    setTouchedFields([]);
+
     return submitCallback();
   };
 
-  return { formData, errors, onChange, onSubmit, getLabelForError };
+  return {
+    formData,
+    errors,
+    touchedFields,
+    onChange,
+    onSubmit,
+    getLabelForError,
+  };
 }

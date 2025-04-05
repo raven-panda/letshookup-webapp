@@ -2,7 +2,14 @@ import { useForm } from '../hook/FormHook.js';
 import Button from '../button/Button.jsx';
 
 export default function LoginForm() {
-  const { formData, errors, onChange, onSubmit, getLabelForError } = useForm(
+  const {
+    formData,
+    touchedFields,
+    errors,
+    onChange,
+    onSubmit,
+    getLabelForError,
+  } = useForm(
     {
       email: '',
       password: '',
@@ -34,7 +41,7 @@ export default function LoginForm() {
         onChange={onChange}
         required
       />
-      {errors['email'] && (
+      {errors['email'] && touchedFields.includes('email') && (
         <div className="text-accent-red">
           {getLabelForError(errors['email'])}
         </div>
@@ -52,7 +59,7 @@ export default function LoginForm() {
         onChange={onChange}
         required
       />
-      {errors['password'] && (
+      {errors['password'] && touchedFields.includes('password') && (
         <div className="text-accent-red">
           {getLabelForError(errors['password'])}
         </div>
