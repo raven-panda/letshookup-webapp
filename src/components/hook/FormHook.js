@@ -1,5 +1,12 @@
 import { useState } from 'react';
 
+/**
+ *
+ * @param value {string}
+ * @param formData
+ * @param validations
+ * @returns {string|undefined}
+ */
 function validateField(value, formData, validations) {
   const fieldErrors = Object.entries(validations)
     .map(([validationKey, validationValue]) => {
@@ -16,6 +23,12 @@ function validateField(value, formData, validations) {
         value !== formData[validationValue]
       )
         return 'passwordConfirm';
+
+      validationKey === 'regexMatch' &&
+        console.log(validationValue.test(value));
+
+      if (validationKey === 'regexMatch' && !validationValue.test(value))
+        return 'regexMatch';
 
       return undefined;
     })
@@ -67,11 +80,16 @@ export function useForm(defaultValue, defaultValidations = {}, submitCallback) {
       case 'equalsFieldValue':
         return (
           'Ce champs et ' +
-          errorParam['equalsFieldValue'] +
+          errorParam?.['equalsFieldValue'] +
           " n'ont pas les mêmes valeurs."
         );
       case 'passwordConfirm':
         return 'Les mots de passes ne correspondent pas.';
+      case 'regexMatch':
+        return (
+          'La valeur de corresponds pas au format attendu : ' +
+          errorParam?.['regexMatch']
+        );
       default:
         return error;
     }

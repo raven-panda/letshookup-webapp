@@ -22,6 +22,7 @@ export default function RegisterForm() {
       },
       email: {
         required: true,
+        regexMatch: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
       },
       password: {
         required: true,
@@ -73,7 +74,9 @@ export default function RegisterForm() {
       />
       {errors['email'] && touchedFields.includes('email') && (
         <div className="text-accent-red">
-          {getLabelForError(errors['email'])}
+          {getLabelForError(errors['email'], {
+            regexMatch: 'john.doe@example.com',
+          })}
         </div>
       )}
 
