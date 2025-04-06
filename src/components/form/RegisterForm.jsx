@@ -1,9 +1,11 @@
 import { useForm } from '../hook/FormHook.js';
 import Button from '../button/Button.jsx';
 import { useAuthentication } from '../hook/AuthHook.jsx';
+import { useNavigate } from 'react-router-dom';
 
 export default function RegisterForm() {
-  const { login } = useAuthentication();
+  const { register } = useAuthentication();
+  const navigate = useNavigate();
   const {
     formData,
     errors,
@@ -16,7 +18,7 @@ export default function RegisterForm() {
       username: '',
       email: '',
       password: '',
-      passwordConfirm: '',
+      passwordVerify: '',
     },
     {
       username: {
@@ -29,7 +31,7 @@ export default function RegisterForm() {
       password: {
         required: true,
       },
-      passwordConfirm: {
+      passwordVerify: {
         required: true,
         passwordConfirm: 'password',
       },
@@ -39,7 +41,9 @@ export default function RegisterForm() {
   const submitCallback = (e) => {
     e.preventDefault();
     const data = onSubmit();
-    login(data);
+    if (!data) return;
+
+    register(data).then(() => navigate('/dashboard'));
   };
 
   return (
@@ -105,24 +109,23 @@ export default function RegisterForm() {
         </div>
       )}
 
-      <label htmlFor="passwordConfirm" className="mt-4">
+      <label htmlFor="passwordVerify" className="mt-4">
         Confirmez le mot de passe <span className="text-accent-red">*</span>
       </label>
       <input
-        name="passwordConfirm"
+        name="passwordVerify"
         type="password"
         className="border-2 rounded-md px-3 py-2 border-placeholder-2 focus:bg-placeholder-3"
-        placeholder="Entrez votre mot de passe"
-        value={formData.passwordConfirm}
+        placeholder="Confirmez votre mot de passe"
+        value={formData.passwordVerify}
         onChange={onChange}
         required
       />
-      {errors['passwordConfirm'] &&
-        touchedFields.includes('passwordConfirm') && (
-          <div className="text-accent-red">
-            {getLabelForError(errors['passwordConfirm'])}
-          </div>
-        )}
+      {errors['passwordVerify'] && touchedFields.includes('passwordVerify') && (
+        <div className="text-accent-red">
+          {getLabelForError(errors['passwordVerify'])}
+        </div>
+      )}
 
       <Button.Outline variant="valid" type="submit" className="mt-8">
         Créer un compte

@@ -1,9 +1,11 @@
 import { useForm } from '../hook/FormHook.js';
 import Button from '../button/Button.jsx';
 import { useAuthentication } from '../hook/AuthHook.jsx';
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginForm() {
   const { login } = useAuthentication();
+  const navigate = useNavigate();
   const {
     formData,
     touchedFields,
@@ -32,7 +34,7 @@ export default function LoginForm() {
     const data = onSubmit();
     if (!data) return;
 
-    login(data);
+    login(data).then(() => navigate('/dashboard'));
   };
 
   return (

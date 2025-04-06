@@ -1,17 +1,23 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import RefreshAuth from '../../action/RefreshAuth.js';
 import Login from '../../action/Login.js';
+import Register from '../../action/Register.js';
 
 const AuthenticationContext = createContext({
   isAuthenticated: undefined,
   login: () => null,
+  register: () => null,
 });
 
 export function AuthenticationProvider({ children }) {
   const [isAuthenticated, setAuthenticated] = useState();
 
   const login = (body) => {
-    Login(body).then(setAuthenticated);
+    return Login(body).then(setAuthenticated);
+  };
+
+  const register = (body) => {
+    return Register(body).then(setAuthenticated);
   };
 
   // Try refreshing token on page load
@@ -31,7 +37,9 @@ export function AuthenticationProvider({ children }) {
   }, [isAuthenticated]);
 
   return (
-    <AuthenticationContext.Provider value={{ isAuthenticated, login }}>
+    <AuthenticationContext.Provider
+      value={{ isAuthenticated, login, register }}
+    >
       {children}
     </AuthenticationContext.Provider>
   );

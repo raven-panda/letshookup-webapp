@@ -1,13 +1,9 @@
-import {
-  BrowserRouter,
-  Outlet,
-  Route,
-  Routes,
-  useNavigate,
-} from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import IndexPage from './pages/Index.jsx';
 import { useAuthentication } from './components/hook/AuthHook.jsx';
-import { useEffect } from 'react';
+import NotificationsMainPage from './pages/dashboard/NotificationsMain.jsx';
+import DashboardLayout from './components/layout/DashboardLayout.jsx';
+import AuthenticatePage from './pages/auth/Authenticate.jsx';
 
 export default function AppRouter() {
   return (
@@ -16,16 +12,29 @@ export default function AppRouter() {
         <Route
           path="/"
           element={
-            <AuthenticationManager needAuth={false} returnUri={'/dashboard'} />
+            <PublicRoute>
+              <IndexPage />
+            </PublicRoute>
           }
-        >
-          <Route index element={<IndexPage />} />
-        </Route>
+        />
+        <Route
+          path="/authenticate"
+          element={
+            <PublicRoute publicOnly>
+              <AuthenticatePage />
+            </PublicRoute>
+          }
+        />
         <Route
           path={'/dashboard'}
-          element={<AuthenticationManager needAuth={true} returnUri={'/'} />}
+          element={
+            <ProtectedRoute>
+              <DashboardLayout />
+            </ProtectedRoute>
+          }
         >
-          <Route index element={<>Hello user !</>} />
+          <Route index element={<NotificationsMainPage />} />
+          <Route path="notifications" element={<NotificationsMainPage />} />
         </Route>
         <Route path={'*'} element={<h1>Not found</h1>} />
       </Routes>
@@ -33,14 +42,30 @@ export default function AppRouter() {
   );
 }
 
-const AuthenticationManager = ({ needAuth, returnUri }) => {
+const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuthentication();
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (typeof isAuthenticated === 'boolean' && isAuthenticated !== needAuth)
-      navigate(returnUri);
-  }, [needAuth, navigate, isAuthenticated, returnUri]);
+  if (isAuthenticated === false) {
+    return <Navigate to="/" replace />;
+  }
 
-  return <Outlet />;
+  if (typeof isAuthenticated !== 'boolean') {
+    return null;
+  }
+
+  return children;
+};
+
+const PublicRoute = ({ publicOnly = false, children }) => {
+  const { isAuthenticated } = useAuthentication();
+
+  if (publicOnly && isAuthenticated === true) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  if (publicOnly && typeof isAuthenticated !== 'boolean') {
+    return null;
+  }
+
+  return children;
 };

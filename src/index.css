@@ -65,7 +65,7 @@ input::placeholder {
   color: var(--color-placeholder-2);
 }
 
-.link {
+a, .link {
   color: var(--color-blue-600);
   text-decoration: underline;
 }
