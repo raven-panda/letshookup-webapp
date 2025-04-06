@@ -3,12 +3,12 @@ import RefreshAuth from '../../action/RefreshAuth.js';
 import Login from '../../action/Login.js';
 
 const AuthenticationContext = createContext({
-  isAuthenticated: false,
+  isAuthenticated: undefined,
   login: () => null,
 });
 
 export function AuthenticationProvider({ children }) {
-  const [isAuthenticated, setAuthenticated] = useState(false);
+  const [isAuthenticated, setAuthenticated] = useState();
 
   const login = (body) => {
     Login(body).then(setAuthenticated);

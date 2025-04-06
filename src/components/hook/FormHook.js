@@ -103,7 +103,6 @@ export function useForm(defaultValue, defaultValidations = {}) {
 
   const onSubmit = () => {
     const { isValid, errors } = validateForm(formData, fieldValidations);
-    console.log({ isValid });
     if (!isValid) {
       setErrors(errors);
       return null;

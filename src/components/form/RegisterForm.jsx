@@ -39,7 +39,6 @@ export default function RegisterForm() {
   const submitCallback = (e) => {
     e.preventDefault();
     const data = onSubmit();
-    console.log({ data });
     login(data);
   };
 

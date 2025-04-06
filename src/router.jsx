@@ -32,7 +32,8 @@ const AuthenticationManager = ({ needAuth, returnUri, children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isAuthenticated !== needAuth) navigate(returnUri);
+    if (typeof isAuthenticated === 'boolean' && isAuthenticated !== needAuth)
+      navigate(returnUri);
   }, [needAuth, navigate, isAuthenticated, returnUri]);
 
   return children;

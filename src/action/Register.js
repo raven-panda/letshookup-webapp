@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { API_LOGIN, API_REGISTER } from '../utils/ApiUrl.js';
 import { LoginMock } from './MockedAction.js';
+import { Log } from '../utils/Log.js';
 
 const isFixtureEnable = import.meta.env.VITE_ENABLE_FIXTURES === 'true';
 
@@ -11,7 +12,7 @@ export default async function Register(body) {
     await axios.post(API_REGISTER, body);
     return true;
   } catch (e) {
-    console.error('Error while posting login data :', e);
+    Log.apiFails('Error while posting login data :', e.message);
     return false;
   }
 }
