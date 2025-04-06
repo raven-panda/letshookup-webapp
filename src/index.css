@@ -66,7 +66,7 @@ input::placeholder {
   text-decoration: underline;
 }
 
-* {
+*:not(.disabled-transition) {
   transition: background-color ease-in-out 0.3s;
 }
 
