@@ -1,4 +1,10 @@
-import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Outlet,
+  Route,
+  Routes,
+  useNavigate,
+} from 'react-router-dom';
 import IndexPage from './pages/Index.jsx';
 import { useAuthentication } from './components/hook/AuthHook.jsx';
 import { useEffect } from 'react';
@@ -8,18 +14,18 @@ export default function AppRouter() {
     <BrowserRouter>
       <Routes>
         <Route
-          index
+          path="/"
           element={
-            <AuthenticationManager needAuth={false} returnUri={'/dashboard'}>
-              <IndexPage />
-            </AuthenticationManager>
+            <AuthenticationManager needAuth={false} returnUri={'/dashboard'} />
           }
-        />
+        >
+          <Route index element={<IndexPage />} />
+        </Route>
         <Route
           path={'/dashboard'}
           element={<AuthenticationManager needAuth={true} returnUri={'/'} />}
         >
-          <Route path={''} element={<>ça devrais pas marcher là</>} />
+          <Route index element={<>Hello user !</>} />
         </Route>
         <Route path={'*'} element={<h1>Not found</h1>} />
       </Routes>
@@ -27,7 +33,7 @@ export default function AppRouter() {
   );
 }
 
-const AuthenticationManager = ({ needAuth, returnUri, children }) => {
+const AuthenticationManager = ({ needAuth, returnUri }) => {
   const { isAuthenticated } = useAuthentication();
   const navigate = useNavigate();
 
@@ -36,5 +42,5 @@ const AuthenticationManager = ({ needAuth, returnUri, children }) => {
       navigate(returnUri);
   }, [needAuth, navigate, isAuthenticated, returnUri]);
 
-  return children;
+  return <Outlet />;
 };
