@@ -1,7 +1,9 @@
 import { useForm } from '../hook/FormHook.js';
 import Button from '../button/Button.jsx';
+import { useAuthentication } from '../hook/AuthHook.jsx';
 
 export default function RegisterForm() {
+  const { login } = useAuthentication();
   const {
     formData,
     errors,
@@ -32,11 +34,17 @@ export default function RegisterForm() {
         passwordConfirm: 'password',
       },
     },
-    () => null,
   );
 
+  const submitCallback = (e) => {
+    e.preventDefault();
+    const data = onSubmit();
+    console.log({ data });
+    login(data);
+  };
+
   return (
-    <form onSubmit={onSubmit} className={'flex flex-col'} noValidate>
+    <form onSubmit={submitCallback} className={'flex flex-col'} noValidate>
       <h2 className="text-xl font-bold">
         <span className="hidden sm:inline">Nouveau membre ? </span>Créer un
         compte

@@ -1,7 +1,9 @@
 import { useForm } from '../hook/FormHook.js';
 import Button from '../button/Button.jsx';
+import { useAuthentication } from '../hook/AuthHook.jsx';
 
 export default function LoginForm() {
+  const { login } = useAuthentication();
   const {
     formData,
     touchedFields,
@@ -23,11 +25,18 @@ export default function LoginForm() {
         required: true,
       },
     },
-    () => null,
   );
 
+  const submitCallback = (e) => {
+    e.preventDefault();
+    const data = onSubmit();
+    if (!data) return;
+
+    login(data);
+  };
+
   return (
-    <form onSubmit={onSubmit} className="flex flex-col" noValidate>
+    <form onSubmit={submitCallback} className="flex flex-col" noValidate>
       <h2 className="text-xl font-bold">Connectez vous</h2>
 
       <label htmlFor="email" className="mt-4">

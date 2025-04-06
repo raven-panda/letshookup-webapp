@@ -24,9 +24,6 @@ function validateField(value, formData, validations) {
       )
         return 'passwordConfirm';
 
-      validationKey === 'regexMatch' &&
-        console.log(validationValue.test(value));
-
       if (validationKey === 'regexMatch' && !validationValue.test(value))
         return 'regexMatch';
 
@@ -40,16 +37,17 @@ function validateField(value, formData, validations) {
 function validateForm(formData, validations = {}) {
   const errors = {};
 
-  Object.entries(formData)
+  const errorArray = Object.entries(formData)
     .map(([formDataKey, formDataValue]) => ({
       name: formDataKey,
       error: validateField(formDataValue, formData, validations[formDataKey]),
     }))
-    .filter((obj) => obj.error)
-    .forEach((obj) => (errors[obj.name] = obj.error));
+    .filter((obj) => obj.error);
+
+  errorArray.forEach((obj) => (errors[obj.name] = obj.error));
 
   return {
-    isValid: errors.length === 0,
+    isValid: errorArray.length === 0,
     errors,
   };
 }
@@ -59,9 +57,9 @@ function validateForm(formData, validations = {}) {
  * @param defaultValue
  * @param defaultValidations
  * @param submitCallback
- * @returns {{formData: object, errors: object, touchedFields: string[], onChange: (function(e): object), onSubmit: (function(e): object), getLabelForError: (function(error: string, errorParams?: object): string)}}
+ * @returns {{formData: object, errors: object, touchedFields: string[], onChange: (function(e): object), onSubmit: (function(): object), getLabelForError: (function(error: string, errorParams?: object): string)}}
  */
-export function useForm(defaultValue, defaultValidations = {}, submitCallback) {
+export function useForm(defaultValue, defaultValidations = {}) {
   if (!defaultValue)
     throw new Error(
       "A 'defaultValue' should be passed into the 'useForm' hook.",
@@ -73,7 +71,6 @@ export function useForm(defaultValue, defaultValidations = {}, submitCallback) {
   const [errors, setErrors] = useState({});
 
   const getLabelForError = (error, errorParam) => {
-    console.log(error);
     switch (error) {
       case 'required':
         return 'Ce champs est requis.';
@@ -104,17 +101,16 @@ export function useForm(defaultValue, defaultValidations = {}, submitCallback) {
     setTouchedFields((prev) => [...prev, name]);
   };
 
-  const onSubmit = (e) => {
-    e.preventDefault();
+  const onSubmit = () => {
     const { isValid, errors } = validateForm(formData, fieldValidations);
+    console.log({ isValid });
     if (!isValid) {
       setErrors(errors);
-      return;
+      return null;
     }
 
     setTouchedFields([]);
-
-    return submitCallback();
+    return formData;
   };
 
   return {
