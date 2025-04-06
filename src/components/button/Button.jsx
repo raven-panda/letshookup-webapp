@@ -3,6 +3,14 @@ import { twMerge } from 'tailwind-merge';
 function Filled({ children, variant = 'main', className = '', ...props }) {
   const classNamesForVariant = (() => {
     switch (variant) {
+      case 'transparent':
+        return [
+          'bg-transparent',
+          'hover:bg-common-1-fade-3',
+          'focus-visible:bg-common-1-fade-3',
+          'active:bg-common-1-fade-2',
+          'text-common-1',
+        ];
       case 'valid':
         return [
           'bg-accent-valid',

@@ -5,6 +5,10 @@
   --color-common-1: #0C0C0C;
   --color-common-2: #FEFEFE;
 
+  --color-common-1-fade-1: rgba(12, 12, 12, 0.3);
+  --color-common-1-fade-2: rgba(12, 12, 12, 0.2);
+  --color-common-1-fade-3: rgba(12, 12, 12, 0.1);
+
   --color-placeholder-1: rgba(85, 85, 85);
   --color-placeholder-2: rgb(182, 182, 182);
   --color-placeholder-3: rgba(230, 230, 230);
