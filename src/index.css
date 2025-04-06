@@ -49,31 +49,33 @@ body {
   color: var(--color-common-1);
 }
 
-button {
-  cursor: pointer;
-}
+@layer base {
+  a, .link {
+    color: var(--color-blue-600);
+    text-decoration: underline;
+  }
 
-input {
-  color: var(--color-common-1);
-}
+  *:not(.disabled-transition) {
+    transition: background-color ease-in-out 0.3s;
+  }
 
-input, button {
-  outline: none;
-}
+  button {
+    cursor: pointer;
+  }
 
-input::placeholder {
-  color: var(--color-placeholder-2);
-}
+  input {
+    color: var(--color-common-1);
+  }
 
-a, .link {
-  color: var(--color-blue-600);
-  text-decoration: underline;
-}
+  input, button {
+    outline: none;
+  }
 
-*:not(.disabled-transition) {
-  transition: background-color ease-in-out 0.3s;
-}
+  input::placeholder {
+    color: var(--color-placeholder-2);
+  }
 
-button, input {
-  transition: background-color ease-in-out 0.1s;
+  button, input {
+    transition: background-color ease-in-out 0.1s;
+  }
 }

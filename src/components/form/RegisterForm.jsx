@@ -2,6 +2,8 @@ import { useForm } from '../hook/FormHook.js';
 import Button from '../button/Button.jsx';
 import { useAuthentication } from '../hook/AuthHook.jsx';
 import { useNavigate } from 'react-router-dom';
+import LoadingSpinner from '../LoadingSpinner.jsx';
+import { useState } from 'react';
 
 export default function RegisterForm() {
   const { register } = useAuthentication();
@@ -37,13 +39,18 @@ export default function RegisterForm() {
       },
     },
   );
+  const [isSubmitting, setSubmitting] = useState(false);
 
   const submitCallback = (e) => {
+    setSubmitting(true);
     e.preventDefault();
     const data = onSubmit();
     if (!data) return;
 
-    register(data).then(() => navigate('/dashboard'));
+    register(data).then(() => {
+      setSubmitting(false);
+      navigate('/dashboard');
+    });
   };
 
   return (
@@ -127,8 +134,16 @@ export default function RegisterForm() {
         </div>
       )}
 
-      <Button.Outline variant="valid" type="submit" className="mt-8">
-        Créer un compte
+      <Button.Outline
+        variant="valid"
+        type="submit"
+        className="mt-8 flex justify-center"
+      >
+        {isSubmitting ? (
+          <LoadingSpinner width={24} height={24} />
+        ) : (
+          'Créer un compte'
+        )}
       </Button.Outline>
     </form>
   );

@@ -2,6 +2,8 @@ import { useForm } from '../hook/FormHook.js';
 import Button from '../button/Button.jsx';
 import { useAuthentication } from '../hook/AuthHook.jsx';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import LoadingSpinner from '../LoadingSpinner.jsx';
 
 export default function LoginForm() {
   const { login } = useAuthentication();
@@ -28,13 +30,18 @@ export default function LoginForm() {
       },
     },
   );
+  const [isSubmitting, setSubmitting] = useState(false);
 
   const submitCallback = (e) => {
     e.preventDefault();
+    setSubmitting(true);
     const data = onSubmit();
     if (!data) return;
 
-    login(data).then(() => navigate('/dashboard'));
+    login(data).then(() => {
+      setSubmitting(false);
+      navigate('/dashboard');
+    });
   };
 
   return (
@@ -79,8 +86,16 @@ export default function LoginForm() {
         </div>
       )}
 
-      <Button.Filled variant="valid" type="submit" className="mt-8">
-        Se connecter
+      <Button.Filled
+        variant="valid"
+        type="submit"
+        className="mt-8 flex justify-center"
+      >
+        {isSubmitting ? (
+          <LoadingSpinner width={24} height={24} />
+        ) : (
+          'Se connecter'
+        )}
       </Button.Filled>
     </form>
   );

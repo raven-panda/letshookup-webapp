@@ -1,4 +1,4 @@
-import { Outlet, useLocation } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import Button from '../button/Button.jsx';
 import { BellIcon, CommentBubbleIcon, LinkIcon, PeoplesIcon } from '../icon';
 import { twMerge } from 'tailwind-merge';
@@ -7,24 +7,19 @@ export default function DashboardLayout() {
   const location = useLocation();
 
   const isCurrentLocationGivenOne = (path) => {
-    const splittedHref = location.pathname?.split('/');
-    return !!splittedHref && splittedHref[splittedHref.length - 1] === path;
+    const splitHref = location.pathname?.split('/');
+    return !!splitHref && splitHref[splitHref.length - 1] === path;
   };
 
   return (
     <main className="flex">
       <nav className="h-screen bg-secondary-1 p-2">
         <div className="border-b border-common-2 pb-4">
-          <Button.Filled
-            variant="transparent"
-            className="block p-2 rounded-full text-common-2"
-          >
-            <LinkIcon />
-          </Button.Filled>
+          <LinkIcon className="block m-2 text-common-2" />
         </div>
         <div className="border-b border-common-2 py-4">
-          <Button.Filled
-            variant="transparent"
+          <Link
+            to={'/dashboard/notifications'}
             className={twMerge(
               'block p-2 rounded-full',
               isCurrentLocationGivenOne('notifications')
@@ -33,7 +28,7 @@ export default function DashboardLayout() {
             )}
           >
             <BellIcon />
-          </Button.Filled>
+          </Link>
         </div>
         <Button.Filled
           variant="transparent"

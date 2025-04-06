@@ -33,7 +33,7 @@ export default function AppRouter() {
             </ProtectedRoute>
           }
         >
-          <Route index element={<NotificationsMainPage />} />
+          <Route index element={<Navigate to={'/dashboard/notifications'} />} />
           <Route path="notifications" element={<NotificationsMainPage />} />
         </Route>
         <Route path={'*'} element={<h1>Not found</h1>} />
@@ -46,7 +46,7 @@ const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuthentication();
 
   if (isAuthenticated === false) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/authenticate" replace />;
   }
 
   if (typeof isAuthenticated !== 'boolean') {
